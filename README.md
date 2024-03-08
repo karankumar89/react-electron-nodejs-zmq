@@ -3,6 +3,8 @@
 ## Description
 A template project for creating desktop applications using React, Electron, and ZeroMQ.
 
+|React| <--`ipc communication`--> |Electron| <--`push/pull socket communications via ZeroMQ`--> |NodeJS| 
+
 ## Installation
 1. Clone the repository.
 2. Navigate to the project directory.
