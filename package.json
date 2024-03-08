@@ -2,17 +2,38 @@
   "name": "react-electron-zeromq",
   "version": "0.1.0",
   "private": true,
+  "main": "public/main.js",
+  "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "concurrently": "^6.2.2",
+    "cross-env": "6.0.2",
+    "electron-is-dev": "1.1.0",
+    "electron-packager": "^16.0.0",
+    "node-polyfill-webpack-plugin": "^3.0.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "wait-on": "3.3.0",
+    "zeromq": "^5.2.0"
+  },
+  "devDependencies": {
+    "electron": "^13.1.7",
+    "electron-builder": "^22.13.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && npm run electron\"",
+    "server": "node backend.js",
+    "electron": "electron .",
+    "package": "electron-packager . --platform=win32 --arch=x64 --out=dist --overwrite",
+    "electron-builder": "electron-builder --win portable",
+    "electron-build": "npm run build && npm run electron-builder",
+    "react-start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -22,6 +43,36 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "build": {
+    "appId": "com.example.electron-zmq-app",
+    "extraMetadata": {
+      "main": "public/main.js"
+    },
+    "extends": null,
+    "files": [
+      "build/**/*",
+      "dist/**/*",
+      "package.json",
+      "public/main.js"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    }
+  },
+  "postinstall": "npx electron-rebuild",
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   },
   "browserslist": {
     "production": [
